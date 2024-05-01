@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 
 import { Inter as FontSans } from "next/font/google";
+import Header from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,11 +27,12 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen min-w-screen max-w-screen bg-background font-sans antialiased",
+          "min-h-screen min-w-screen max-w-screen bg-background font-sans antialiased overflow-hidden overflow-y-auto",
           fontSans.variable
         )}
       >
-        {children}
+        <Header />
+        <div className="flex flex-col py-8 px-[5rem]">{children}</div>
       </body>
     </html>
   );
