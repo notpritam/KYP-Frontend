@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 
+import axios from "axios";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
@@ -13,6 +15,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,8 +26,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const formSchema = z.object({
+  name: z.string().min(2).max(50),
   username: z.string().min(2).max(50),
   password: z.string().min(8).max(50),
+  type: z.enum(["user", "restaurant"]),
 });
 
 function Page() {
@@ -31,8 +38,10 @@ function Page() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       username: "",
       password: "",
+      type: "user",
     },
   });
 
@@ -40,22 +49,48 @@ function Page() {
     router.push("/dashboard");
   }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    login({ id: 1, name: values.username, role: Role.USER });
+  const handleRegister = () => {
+    console.log(form.getValues());
+    try {
+      axios
+        .post(process.env.API_URL + "auth/register", form.getValues())
+        .then((e) => {
+          console.log(e, "this is response from server");
+        });
+    } catch (e) {
+      console.log(e, "this is error from server");
+    }
+  };
 
-    router.push("/dashboard");
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    handleRegister();
+
+    // login({ id: 1, name: values.username, role: Role.USER });
+
     console.log(values);
   }
   return (
     <div className="flex flex-col gap-4 items-center justify-center h-screen">
-      <h1 className="text-2xl font-semibold">Login</h1>
+      <h1 className="text-2xl font-semibold">Register</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-2 min-w-[400px]"
         >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Name" {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="username"
@@ -83,18 +118,50 @@ function Page() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>Account Type</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex space-x-4 mt-4 "
+                  >
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="user" />
+                      </FormControl>
+                      <FormLabel className="font-normal">User</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="restaurant" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Restaurant</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="mt-8 flex flex-col gap-4">
             <Button className="w-full mt-8" type="submit">
-              Login
+              Register
             </Button>
             <Link
               className={buttonVariants({
                 variant: "ghost",
                 className: "w-full",
               })}
-              href="/register"
+              href="/login"
             >
-              Register
+              Login
             </Link>
           </div>
         </form>

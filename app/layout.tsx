@@ -32,7 +32,7 @@ export default function RootLayout({
         )}
       >
         <Header />
-        <div className="flex flex-col py-8 px-[5rem]">{children}</div>
+        <div className="flex flex-col mt-[4rem] py-8 px-[5rem]">{children}</div>
       </body>
     </html>
   );

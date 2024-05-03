@@ -4,6 +4,7 @@ import SectionHeading from "@/components/SectionHeading";
 import { Button } from "@/components/ui/button";
 import { useKYPStore } from "@/lib/store";
 import { redirect } from "next/dist/server/api-utils";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -17,9 +18,9 @@ function Page() {
   }
 
   return (
-    <div className="mt-[4rem] flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
       <SectionHeading title="Dashboard" description="Welcome to the dashboard.">
-        <Button onClick={logout}>New Bookings</Button>
+        <Link href={"/search"}>New Bookings</Link>
       </SectionHeading>
 
       {/* <SectionHeading

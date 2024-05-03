@@ -1,10 +1,10 @@
+import SectionHeading from "@/components/SectionHeading";
 import React from "react";
 
 function Page() {
   return (
     <div>
-      <h1>Profile</h1>
-      <p>My profile page</p>
+      <SectionHeading title="Profile" description="Your profile information." />
     </div>
   );
 }

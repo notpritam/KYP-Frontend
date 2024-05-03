@@ -12,8 +12,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Input } from "./ui/input";
+import { Search } from "lucide-react";
 
 function Header() {
   const { login, logout, user } = useKYPStore();
@@ -25,11 +40,18 @@ function Header() {
   };
 
   return (
-    <div className="flex lg:px-8 fixed items-center justify-between top-0 py-4 h-[4rem] w-full bg-red-200">
+    <div className="flex lg:px-8 fixed items-center justify-between top-0 py-4  w-full border-b-[1px] bg-gray-50">
       <Link href={"/"} className="text-xl font-medium">
         KNOW YOUR PLACE
       </Link>
-
+      <div className="flex lg:w-[600px] items-center border-b px-3 bg-white">
+        <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+        <Input
+          className={
+            "flex h-11 border-none focus:border-none  w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          }
+        />
+      </div>
       {user ? (
         <div className="flex items-center gap-4">
           <span>{user.name}</span>
